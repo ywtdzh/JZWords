@@ -2,5 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{@types/bcrypt-nodejs, @types/koa-passport, @types/koa-route, @types/node-uuid, @types/react, @types/sequelize}" />
+    <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>
