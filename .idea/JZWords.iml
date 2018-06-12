@@ -14,5 +14,10 @@
     <orderEntry type="library" name="@types/node-uuid" level="application" />
     <orderEntry type="library" name="@types/react" level="application" />
     <orderEntry type="library" name="@types/sequelize" level="application" />
+    <orderEntry type="library" name="@types/koa-router" level="application" />
+    <orderEntry type="library" name="@types/koa-redis" level="application" />
+    <orderEntry type="library" name="@types/koa" level="application" />
+    <orderEntry type="library" name="@types/koa-bodyparser" level="application" />
+    <orderEntry type="library" name="@types/lodash" level="application" />
   </component>
 </module>

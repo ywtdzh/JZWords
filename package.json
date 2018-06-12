@@ -9,6 +9,7 @@
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
     "koa2-cors": "^2.0.5",
+    "lodash": "^4.17.10",
     "node-uuid": "^1.4.8",
     "pg": "^7.4.3",
     "sequelize": "^4.37.7"
