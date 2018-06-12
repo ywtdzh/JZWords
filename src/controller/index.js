@@ -9,6 +9,10 @@ require('../models').then(database => {
     ({battle, exClass, history, user, word} = database.models);
 });
 
+const predicateNotNull = function (value, key) {
+    return value === undefined && value === null;
+};
+
 async function userInfo(theUser) {
     const theBattles = await battle.findAll({where: {[Op.or]: [{userId: theUser.id}, {opponentId: theUser.id}]}});
     let win = 0, other = 0;
@@ -43,11 +47,14 @@ async function getUserInfo(ctx) {
         return;
     }
     const theClass = await theUser.getExClass();
-    response(ctx, 200, {
-        ... await userInfo(theUser),
-        classId: theClass.id,
-        className: theClass.name,
-    });
+    const result = await userInfo(theUser);
+    if(theClass) {
+        Object.assign(result, {
+            classId: theClass.id,
+            className: theClass.name,
+        });
+    }
+    response(ctx, 200, result);
 }
 
 async function getUserHistory(ctx) {
@@ -109,7 +116,7 @@ async function getItem(ctx) {
 async function getClassList(ctx) {
     const classes = await exClass.findAll();
     response(ctx, 200, classes.map(cla => {
-        return {name: cla.name, exp: cla.exp};
+        return {name: cla.name, exp: cla.exp, id: cla.id};
     }));
 }
 
@@ -156,22 +163,23 @@ async function setUserInfo(ctx) {
     }
     const theUser = await user.findOne({where: {identifier: UUID}});
     if (theUser) {
-        await theUser.update({
+        await theUser.update(_.omitBy({
             expSingle,
             expTeam: expTwin,
             nickname: nickName,
             picUrl,
             exClassId: classId,
-        });
-    } else
-        await user.create({
+        }, predicateNotNull));
+    } else {
+        await user.create(_.omitBy({
             identifier: UUID,
             expSingle,
             expTeam: expTwin,
             nickname: nickName,
             picUrl,
             exClassId: classId,
-        });
+        }, predicateNotNull));
+    }
     response(ctx, 200, "success");
 }
 
@@ -186,23 +194,23 @@ async function addHistory(ctx) {
         response(ctx, 401, new Error("User not found"));
         return;
     }
-    await theUser.createHistory({
+    await theUser.createHistory(_.omitBy({
         result,
         title,
         type,
-    });
+    }, predicateNotNull));
     response(ctx, 200, "success");
 }
 
 async function addClass(ctx) {
     const {name, exp} = ctx.request.body;
     try {
-        await exClass.create({
+        await exClass.create(_.omitBy({
             name,
             exp: exp || 0,
-        });
+        }, predicateNotNull));
     } catch (e) {
-        response(ctx, 400, new Error("Class name has exist"));
+        response(ctx, 400, e);
         return;
     }
 
@@ -217,10 +225,10 @@ async function setClass(ctx) {
         return;
     }
     try {
-        await theClass.update({
+        await theClass.update(_.omitBy({
             name,
             exp,
-        });
+        }, predicateNotNull));
     } catch (e) {
         response(ctx, 400, e);
         return;

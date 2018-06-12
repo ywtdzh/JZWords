@@ -31,7 +31,7 @@ function response(ctx, status, payload) {
     if (status === 0 || status === 200)
         response.data = payload;
     else {
-        response.err = payload && payload.toString();
+        response.error = payload && payload.toString();
         console.error(payload);
     }
     ctx.status = status || 200;
