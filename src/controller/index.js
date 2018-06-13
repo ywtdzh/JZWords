@@ -48,7 +48,7 @@ async function getUserInfo(ctx) {
     }
     const theClass = await theUser.getExClass();
     const result = await userInfo(theUser);
-    if(theClass) {
+    if (theClass) {
         Object.assign(result, {
             classId: theClass.id,
             className: theClass.name,
@@ -103,11 +103,11 @@ async function getItem(ctx) {
     items = chunk(items, selectNum);
     items = items.map(item => {
         const result = {
-            title: item[0]['sourceForm' + random(1, 2)],
-            selector: _.slice(item, 1).map(theWord => theWord.detail),
+            title: item[0].detail,
+            selector: _.slice(item, 1).map(theWord => theWord['sourceForm' + random(1, 2)]),
             right: random(1, selectNum),
         };
-        result.selector.splice(result.right - 1, 0, item[0].detail);
+        result.selector.splice(result.right - 1, 0, item[0]['sourceForm' + random(1, 2)]);
         return result;
     });
     response(ctx, 200, items);

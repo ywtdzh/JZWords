@@ -2,7 +2,7 @@
 echo "You need docker container postgres && redis."
 echo "If not, you may configure environment using commands below:"
 echo "docker run --name postgres --restart=always -d postgres"
-docker build . -t jz_word_tag
+docker build -t jz_word_tag .
 docker run -it --rm --link postgres:postgres postgres psql -c "CREATE USER jz_word_user WITH PASSWORD '52%#fwe82'" -h postgres -U postgres
 docker run -it --rm --link postgres:postgres postgres psql -c "CREATE DATABASE jz_word" -h postgres -U postgres
 docker run -v $PWD:/var/www -w /var/www -t jz_word_tag yarn
