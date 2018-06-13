@@ -184,21 +184,25 @@ async function setUserInfo(ctx) {
 }
 
 async function addHistory(ctx) {
-    const {UUID, result, title, type} = ctx.request.body;
-    if (!UUID || !result || !title) {
-        response(ctx, 400, new Error("Missing necessary fields"));
-        return;
+    let body = ctx.request.body;
+    if (!(body instanceof Array)) body = [body];
+    for (const req of body) {
+        const {UUID, result, title, type} = req;
+        if (!UUID || !result || !title) {
+            response(ctx, 400, new Error("Missing necessary fields"));
+            return;
+        }
+        const theUser = await getUserByUUID(UUID);
+        if (!theUser) {
+            response(ctx, 401, new Error("User not found"));
+            return;
+        }
+        await theUser.createHistory(_.omitBy({
+            result,
+            title,
+            type,
+        }, predicateNotNull));
     }
-    const theUser = await getUserByUUID(UUID);
-    if (!theUser) {
-        response(ctx, 401, new Error("User not found"));
-        return;
-    }
-    await theUser.createHistory(_.omitBy({
-        result,
-        title,
-        type,
-    }, predicateNotNull));
     response(ctx, 200, "success");
 }
 
