@@ -26,7 +26,7 @@ async function userInfo(theUser) {
         nickName: theUser.nickname,
         picUrl: theUser.picUrl,
         expSingle: theUser.expSingle,
-        expTwin: theUser.expTeam,
+        expTwin: theUser.expTwin,
         winRate: win / (win + other),
     };
 }
@@ -165,7 +165,7 @@ async function setUserInfo(ctx) {
     if (theUser) {
         await theUser.update(_.omitBy({
             expSingle,
-            expTeam: expTwin,
+            expTwin,
             nickname: nickName,
             picUrl,
             exClassId: classId,
@@ -174,7 +174,7 @@ async function setUserInfo(ctx) {
         await user.create(_.omitBy({
             identifier: UUID,
             expSingle,
-            expTeam: expTwin,
+            expTwin,
             nickname: nickName,
             picUrl,
             exClassId: classId,

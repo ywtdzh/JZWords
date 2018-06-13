@@ -6,7 +6,7 @@ const User = function (database) {
         nickname: {type: Sequelize.STRING},
         picUrl: {type: Sequelize.STRING},
         expSingle: {type: Sequelize.INTEGER, allowNull: false, defaultValue: 0},
-        expTeam: {type: Sequelize.INTEGER, allowNull: false, defaultValue: 0},
+        expTwin: {type: Sequelize.INTEGER, allowNull: false, defaultValue: 0},
     });
 };
 
